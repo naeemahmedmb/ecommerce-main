@@ -1,0 +1,90 @@
+{% extends 'itshop/base.html' %}
+{% load custom_filter %}
+{% load cart %}
+{% block content %}
+<body onload="window.print()">
+    <div class="toast show mt-3 mx-auto">
+        <div class="toast-header">
+          <strong class="me-auto">Order placed Successfully</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+    
+        <div class="row" id="pdf">
+            <div class="col-lg-10 mx-auto mt-3">
+                <h4 class="text-center mx-auto">Invoice</h4>
+                <table class="table table-bordered table-hover">
+                    <thead class="text-bg-success text-center">
+                        <tr>
+                
+                            <th>#</th>
+                            <th>Product Name</th>
+                            <th>Image</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                
+                    <tbody class="">
+                        {% for x in products %}
+                        <tr>
+                            <td>{{ forloop.counter}}</td>
+                            <td>{{x.name}}</td>
+                            <td><img src="{{x.image.url}}" height="50" alt=""></td>
+                            <td class="text-center">1</td>
+                            <td>{{x.discount|price:x.sell_price}}</td>
+                            <td>On shipping</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-bg-success">Grand Total</td>
+                            <td class="text-bg-success">{{products|total_cart_price:request.session.cart|currency}}</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+                <button type="button" class="btn btn-primary" onclick="convertHTMLtoPDF()" id="inp">Print</button>
+
+
+                <script src=
+                "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+                    </script>
+                    <script src=
+                "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+                <script type="text/javascript">
+                    function convertHTMLtoPDF() {
+                        document.querySelector("#inp").style.display="none";
+                        const { jsPDF } = window.jspdf;
+                
+                        var doc = new jsPDF('l', 'mm', [1500, 1400]);
+                        var pdfjs = document.querySelector('#pdf');
+                        doc.html(pdfjs, {
+                            callback: function(doc) {
+                                var numPages = doc.internal.getNumberOfPages();
+                                if (numPages > 1) {
+                                    // Delete all pages except the first one
+                                    for (var i = numPages; i > 1; i--) {
+                                        doc.deletePage(i);
+                                    }
+                                }
+                                doc.save("newpdf.pdf");
+                            },
+                            x: 12,
+                            y: 12
+                        });			
+                    }		
+                </script>
+
+            </body>
+
+
+{% endblock %}
+    
+        
+    

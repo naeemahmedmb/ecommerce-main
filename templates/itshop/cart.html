@@ -1,0 +1,140 @@
+{% extends 'itshop/base.html' %}
+{% load custom_filter %}
+{% load cart %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mx-auto mt-3">
+            <table class="table table-bordered table-hover">
+                <thead class="text-bg-success text-center">
+                    <tr>
+            
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Image</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            
+                <tbody class="">
+                    {% for x in products %}
+                    <tr>
+                        <td>{{ forloop.counter}}</td>
+                        <td>{{x.name}}</td>
+                        <td><img src="{{x.image.url}}" height="50" alt=""></td>
+                        <td class="text-center">1</td>
+                        <td>{{x.discount|price:x.sell_price}}</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-danger text-center">Remove</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-bg-success">Grand Total</td>
+                        <td class="text-bg-success">{{products|total_cart_price:request.session.cart|currency}}</td>
+                    </tr>
+                </tbody>
+                
+            </table>
+            
+            
+            <!-- <form action="" method="post">
+            
+                <input type="submit" value="Checkout" class="btn btn-primary ms-1" />
+                
+            </form> -->
+
+
+<!-- <div class="col-md-3 mx-auto">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#OrderCart" class="btn btn-outline-success border rounded float-lg-end">Check Out</a>
+</div>
+<div class="modal fade" id="OrderCart" tabindex="-1" role="dialog" aria-labelledby="OrderCartLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title">This is header</h1>
+                        </div>
+                    </div>
+                </div>
+</div> -->
+
+            
+
+  <!-- Button trigger modal -->
+  <a href="#" data-bs-toggle="modal" data-bs-target="#OrderCart" class="btn btn-outline-success border rounded float-lg-end">Check Out</a>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="OrderCart" tabindex="-1" aria-labelledby="OrderCartLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="OrderCartLabel">Check Out Form</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+            <div class="m-2 p-3">
+                <div class="form-group">
+                    <label for=""><b>Total Price:</b> {{products|TOTAL_PRICE}}</label><br>
+                    <label for=""><b>Shipping Charge:</b> Tk. 100</label><br>
+                    <label for=""><b>Grand Total:</b> {{products|GRAND_TOTAL:100}}</label>
+                   
+                </div>
+                <hr/>
+                <h4 class="text-bg-primary text-center py-2 rounded">Delivery Address</h4>
+                <form action="/check-out" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="">Name</label>
+                        <input type="text" name="name" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                       
+                    </div>
+                    <div class="form-group">
+                      <label for="">Address</label>
+                      <input type="text" name="address" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                     
+                    </div>
+                    <div class="form-group">
+                        <label for="">Cell Number</label>
+                        <input type="text" name="cell" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                    </div>
+
+                      
+                      <input type="submit" class="btn float-right btn-outline-success mt-2" value="Place Order">
+                </form>
+
+                
+            </div>
+
+        </div>
+        <div class="modal-footer mx-auto">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        </div>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
